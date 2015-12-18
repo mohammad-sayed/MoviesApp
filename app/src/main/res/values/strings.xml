@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Movies App</string>
+    <string name="no_available_data">No available data</string>
+    <string name="release_date">Release date:&#160;</string>
+    <string name="average_rating">Average Rating:&#160;</string>
+    <string name="out_of_ten">%.2f / 10</string>
+    <string name="settings">Settings</string>
+
+</resources>
