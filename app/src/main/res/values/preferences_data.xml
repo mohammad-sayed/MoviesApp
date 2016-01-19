@@ -5,14 +5,17 @@
     <string name="movies_sorted_by_title">Movies Sorted By:</string>
     <string name="most_popular">Most Popular</string>
     <string name="highest_rated">Highest Rated</string>
+    <string name="favorites">Favorite Movies</string>
     <string-array name="sorted_by_preference_entries">
         <item>@string/most_popular</item>
         <item>@string/highest_rated</item>
+        <item>@string/favorites</item>
     </string-array>
 
     <string-array name="sorted_by_preference_entries_values">
         <item>@string/popularity_desc</item>
         <item>@string/vote_average_desc</item>
+        <item>@string/favorites_value</item>
     </string-array>
 
 

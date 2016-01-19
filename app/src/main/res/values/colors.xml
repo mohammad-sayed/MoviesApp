@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#C0A86C</color>
+    <color name="colorPrimaryDark">#373737</color>
+    <color name="colorPrimaryDarkTransparent">#30373737</color>
+    <color name="colorPrimaryNormalDark">#6F6F6F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="transparentBlack">#90000000</color>
+    <color name="transparentBage">#AAFFFEE0</color>
+    <color name="darkYellow">#E7D700</color>
+
 </resources>

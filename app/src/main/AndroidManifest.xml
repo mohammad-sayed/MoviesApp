@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ms.moviesapp.moviesapp">
+    package="com.ms.moviesapp">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -20,18 +20,24 @@
         </activity>
         <activity
             android:name=".DetailsActivity"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".SettingsActivity"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName="com.ms.moviesapp.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+
+        <provider
+            android:name=".servicelayer.database.MoviesProvider"
+            android:authorities="com.ms.moviesapp"
+            android:exported="true" />
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.ms.moviesapp.moviesapp;
+package com.ms.moviesapp;
 
 import org.junit.Test;
 
