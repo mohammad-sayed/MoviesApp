@@ -3,7 +3,7 @@
 
 # IMPORTANT NOTES:
 In case you don't want to read what this project included please read the following notes:
-- You will find it in 3 dots settings > Select from "Movies Sorted By:" SharedPreferences list.
+- You will find sorting options in Settings > Select from "Movies Sorted By:" SharedPreferences list.
 - Favorite Movies is one of "Movies Sorted By:" SharePreferences list items, found in Settings.
 - The ContentProvider used in this project was implemented step by step with its unit testing, without any use of external APIs.
 
