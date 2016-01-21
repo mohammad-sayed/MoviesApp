@@ -1,20 +1,27 @@
 package com.ms.moviesapp;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.ms.moviesapp.entities.Movie;
 import com.ms.moviesapp.fragments.MovieDetailsFragment;
 import com.ms.moviesapp.fragments.MoviesListFragment;
+import com.ms.moviesapp.utils.ImageUtility;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity implements MoviesListFragment.OnMovieSelectedListener,
         MoviesListFragment.OnMovieListRetrieved {
 
+    private ImageView mIvMovieBlurBackground;
     private MovieDetailsFragment mMovieDetailsFragment;
     private MoviesListFragment mMoviesListFragment;
     private int mSelectedItemPosition = 0;
@@ -27,12 +34,14 @@ public class MainActivity extends AppCompatActivity implements MoviesListFragmen
             mSelectedItemPosition = savedInstanceState.getInt(Constants.SELECTED_MOVIE_POSITION_TAG);
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
+        mIvMovieBlurBackground = (ImageView) findViewById(R.id.iv_blur_background);
         mMoviesListFragment = (MoviesListFragment) fragmentManager
                 .findFragmentById(R.id.movies_list_fragment);
         mMovieDetailsFragment = (MovieDetailsFragment) fragmentManager
                 .findFragmentById(R.id.movie_details_fragment);
         if (mMovieDetailsFragment != null && mMovieDetailsFragment.getView() != null)
             mMovieDetailsFragment.getView().setVisibility(View.INVISIBLE);
+
     }
 
     @Override
@@ -68,8 +77,28 @@ public class MainActivity extends AppCompatActivity implements MoviesListFragmen
             startActivity(intent);
         } else {
             mSelectedItemPosition = position;
+            updateBackgroundImage(movie);
             mMovieDetailsFragment.updateViewsData(movie);
         }
+    }
+
+    private void updateBackgroundImage(Movie movie) {
+        String posterPath = getString(R.string.movie_api_base_url)
+                .concat(getString(R.string.poster_size_w342))
+                .concat(movie.getPosterPath());
+        Picasso.with(this).load(posterPath).placeholder(R.drawable.background).error(R.drawable.background).into(mIvMovieBlurBackground, new Callback() {
+            @Override
+            public void onSuccess() {
+                Bitmap bitmap = ((BitmapDrawable) mIvMovieBlurBackground.getDrawable()).getBitmap();
+                Bitmap blurredBitmap = ImageUtility.blur(MainActivity.this, bitmap);
+                mIvMovieBlurBackground.setImageBitmap(blurredBitmap);
+            }
+
+            @Override
+            public void onError() {
+            }
+        });
+
     }
 
     @Override

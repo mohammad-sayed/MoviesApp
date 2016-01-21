@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/iv_blur_background"
@@ -13,12 +13,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_movie_details"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <!--<ListView
-        android:id="@+id/lv_movie_details"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />-->
+        android:layout_height="match_parent"
+        android:layout_marginBottom="5dp"/>
 
     <ProgressBar
         android:id="@+id/pb_loading"

@@ -10,16 +10,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
-import android.support.v8.renderscript.Allocation;
-import android.support.v8.renderscript.Element;
-import android.support.v8.renderscript.RenderScript;
-import android.support.v8.renderscript.ScriptIntrinsicBlur;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ms.moviesapp.Constants;
@@ -40,6 +36,8 @@ import com.ms.moviesapp.entities.Review;
 import com.ms.moviesapp.entities.Trailer;
 import com.ms.moviesapp.servicelayer.FetchDataAsyncTask;
 import com.ms.moviesapp.servicelayer.database.MovieContract;
+import com.ms.moviesapp.utils.ImageUtility;
+import com.ms.moviesapp.widgets.CustomLinearLayoutManager;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -57,9 +55,9 @@ public class MovieDetailsFragment extends Fragment implements
 
     private static final String LOG_TAG = MovieDetailsFragment.class.getSimpleName();
     private Movie mMovie;
-    private CollapsingToolbarLayout mCollapsingToolbarLayout;
-    private ImageView mIvMovieBlurBackground;
+    private TextView mTvMovieTitle;
     private ImageView mIvMovieCover;
+    private ImageView mIvMovieBlurBackground;
     private ProgressBar mPbLoading;
 
     private RecyclerView mRvMovieDetails;
@@ -69,7 +67,6 @@ public class MovieDetailsFragment extends Fragment implements
     //private ListView mLvDetails;
     //private ListTypesItemsAdapter mAdapter;
     //private TextView mTvMovieTitle;
-    private LayoutInflater mInflater;
     private Uri mYoutubeUri;
     private final String PARAMETER_VIDEO = "v";
     private Menu mMenu;
@@ -84,7 +81,6 @@ public class MovieDetailsFragment extends Fragment implements
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mInflater = getLayoutInflater(savedInstanceState);
         initializeViews(view);
         if (getArguments() != null) {
             mMovie = (Movie) getArguments().getSerializable(Constants.MOVIE_TAG);
@@ -114,8 +110,8 @@ public class MovieDetailsFragment extends Fragment implements
         }
     }
 
-    private void updateSharingOption() {
-        setHasOptionsMenu(true);
+    private void updateSharingOption(boolean hasOptionMenu) {
+        setHasOptionsMenu(hasOptionMenu);
     }
 
     private Intent createShareTrailerIntent() {
@@ -130,16 +126,16 @@ public class MovieDetailsFragment extends Fragment implements
 
 
     private void initializeViews(View view) {
-        mCollapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
-        if (mCollapsingToolbarLayout != null) {
-            mIvMovieCover = (ImageView) mCollapsingToolbarLayout.findViewById(R.id.iv_cover);
+        mTvMovieTitle = (TextView) view.findViewById(R.id.tv_movie_title);
+        if (mTvMovieTitle != null) {
+            mIvMovieCover = (ImageView) view.findViewById(R.id.iv_cover);
         }
         mIvMovieBlurBackground = (ImageView) view.findViewById(R.id.iv_blur_background);
         mPbLoading = (ProgressBar) view.findViewById(R.id.pb_loading);
         mRvMovieDetails = (RecyclerView) view.findViewById(R.id.rv_movie_details);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager linearLayoutManager = new CustomLinearLayoutManager(getActivity());
         mRvMovieDetails.setLayoutManager(linearLayoutManager);
-        mRvMovieDetails.setNestedScrollingEnabled(true);
+        mRvMovieDetails.setNestedScrollingEnabled(false);
         mRvMovieDetails.setHasFixedSize(false);
         String youtubeUrl = getString(R.string.youtube_url);
         mYoutubeUri = Uri.parse(youtubeUrl);
@@ -153,31 +149,30 @@ public class MovieDetailsFragment extends Fragment implements
                 .concat(context.getString(R.string.poster_size_w342))
                 .concat(movie.getThumbnail());
 
-        if (mCollapsingToolbarLayout != null) {
-            mCollapsingToolbarLayout.setTitle(movie.getTitle());
-            //mTvMovieTitle.setText(movie.getTitle());
-            Picasso.with(context).load(coverPath).error(R.drawable.background).into(mIvMovieCover);
+        if (mTvMovieTitle != null) {
+            mTvMovieTitle.setText(movie.getTitle());
+            Picasso.with(context).load(coverPath).placeholder(R.drawable.placeholder_blur).error(R.drawable.placeholder_blur).into(mIvMovieCover);
         }
 
-        String posterPath = context.getString(R.string.movie_api_base_url)
-                .concat(context.getString(R.string.poster_size_w342))
-                .concat(movie.getPosterPath());
+        if (mIvMovieBlurBackground != null) {
+            String posterPath = context.getString(R.string.movie_api_base_url)
+                    .concat(context.getString(R.string.poster_size_w342))
+                    .concat(movie.getPosterPath());
+            Picasso.with(context).load(posterPath).placeholder(R.drawable.background).error(R.drawable.background).into(mIvMovieBlurBackground, new Callback() {
+                @Override
+                public void onSuccess() {
+                    if (getContext() == null)
+                        return;
+                    Bitmap bitmap = ((BitmapDrawable) mIvMovieBlurBackground.getDrawable()).getBitmap();
+                    Bitmap blurredBitmap = ImageUtility.blur(getContext(), bitmap);
+                    mIvMovieBlurBackground.setImageBitmap(blurredBitmap);
+                }
 
-        Picasso.with(context).load(posterPath).error(R.drawable.background).into(mIvMovieBlurBackground, new Callback() {
-            @Override
-            public void onSuccess() {
-                if (getContext() == null)
-                    return;
-                Bitmap bitmap = ((BitmapDrawable) mIvMovieBlurBackground.getDrawable()).getBitmap();
-                Bitmap blurredBitmap = blur(bitmap);
-                mIvMovieBlurBackground.setImageBitmap(blurredBitmap);
-            }
-
-            @Override
-            public void onError() {
-            }
-        });
-
+                @Override
+                public void onError() {
+                }
+            });
+        }
 
         if (mAdapter != null) {
             mAdapter.clearItems();
@@ -311,12 +306,11 @@ public class MovieDetailsFragment extends Fragment implements
             }
             if (!listTypes.isEmpty())
                 mAdapter.addItems(listTypes);
-            //False for Reviews
             if (trailers.size() > 0)
-                updateSharingOption();
+                updateSharingOption(true);
+            else
+                updateSharingOption(false);
             getTrailersOrReviews(mMovie.getId(), getString(R.string.reviews_uri), mReviewsDataFetchedListener);
-            //mPbLoading.setVisibility(View.INVISIBLE);
-            //mMoviesItemsAdapter.setItems(movies);
         }
     }
 
@@ -373,11 +367,6 @@ public class MovieDetailsFragment extends Fragment implements
         private final String LOG_TAG = GetTrailersListFromDatabaseAsyncTask.class.getSimpleName();
 
         @Override
-        protected void onPreExecute() {
-            //mPbLoading.setVisibility(View.VISIBLE);
-        }
-
-        @Override
         protected ArrayList<Trailer> doInBackground(Long... params) {
             long movieId = params[0];
             return MovieContract.getTrailersByMovieId(getContext(), movieId);
@@ -397,7 +386,9 @@ public class MovieDetailsFragment extends Fragment implements
             if (!listTypes.isEmpty())
                 mAdapter.addItems(listTypes);
             if (trailers.size() > 0)
-                updateSharingOption();
+                updateSharingOption(true);
+            else
+                updateSharingOption(false);
             new GetReviewsListFromDatabaseAsyncTask().execute(mMovie.getId());
             //mPbLoading.setVisibility(View.INVISIBLE);
             //mMoviesItemsAdapter.setItems(movies);
@@ -406,11 +397,6 @@ public class MovieDetailsFragment extends Fragment implements
 
     private class GetReviewsListFromDatabaseAsyncTask extends AsyncTask<Long, Void, ArrayList<Review>> {
         private final String LOG_TAG = GetReviewsListFromDatabaseAsyncTask.class.getSimpleName();
-
-        @Override
-        protected void onPreExecute() {
-            //mPbLoading.setVisibility(View.VISIBLE);
-        }
 
         @Override
         protected ArrayList<Review> doInBackground(Long... params) {
@@ -433,25 +419,6 @@ public class MovieDetailsFragment extends Fragment implements
             mPbLoading.setVisibility(View.INVISIBLE);
             //mMoviesItemsAdapter.setItems(movies);
         }
-    }
-
-
-    public Bitmap blur(Bitmap image) {
-        if (null == image) return null;
-
-        final int BLUR_RADIUS = 25;
-        Bitmap outputBitmap = Bitmap.createBitmap(image);
-        final RenderScript renderScript = RenderScript.create(getContext());
-        Allocation tmpIn = Allocation.createFromBitmap(renderScript, image);
-        Allocation tmpOut = Allocation.createFromBitmap(renderScript, outputBitmap);
-
-        //Intrinsic Gausian blur filter
-        ScriptIntrinsicBlur theIntrinsic = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript));
-        theIntrinsic.setRadius(BLUR_RADIUS);
-        theIntrinsic.setInput(tmpIn);
-        theIntrinsic.forEach(tmpOut);
-        tmpOut.copyTo(outputBitmap);
-        return outputBitmap;
     }
 
 }

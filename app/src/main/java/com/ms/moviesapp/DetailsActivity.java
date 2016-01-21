@@ -27,7 +27,7 @@ public class DetailsActivity extends AppCompatActivity {
         mActionToolbar = (Toolbar) mCollapsingToolbarLayout.findViewById(R.id.toolbar);
         setSupportActionBar(mActionToolbar);
         ActionBar actionBar = getSupportActionBar();
-        //actionBar.setHomeAsUpIndicator(android.R.drawable);
+        actionBar.setHomeAsUpIndicator(R.drawable.home_up);
         actionBar.setHomeButtonEnabled(true);
         mIvMovieCover = (ImageView) mCollapsingToolbarLayout.findViewById(R.id.iv_cover);
         if (getIntent() != null && getIntent().hasExtra(Constants.MOVIE_TAG)) {
@@ -39,7 +39,7 @@ public class DetailsActivity extends AppCompatActivity {
 
             mCollapsingToolbarLayout.setTitle(movie.getTitle());
             //mTvMovieTitle.setText(movie.getTitle());
-            Picasso.with(this).load(coverPath).error(R.drawable.no_poster).into(mIvMovieCover);
+            Picasso.with(this).load(coverPath).placeholder(R.drawable.placeholder_blur).error(R.drawable.placeholder_blur).into(mIvMovieCover);
 
             MovieDetailsFragment movieDetailsFragment = new MovieDetailsFragment();
             Bundle bundle = new Bundle();
