@@ -1,4 +1,4 @@
-package com.ms.moviesapp.adapters;
+package com.ms.moviesapp.moviedetails;
 
 import android.content.Context;
 import android.net.Uri;

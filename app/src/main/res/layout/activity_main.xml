@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/movies_list_fragment"
-        android:name="com.ms.moviesapp.fragments.MoviesListFragment"
+        android:name="com.ms.moviesapp.movieslist.MoviesListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>

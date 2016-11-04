@@ -1,4 +1,4 @@
-package com.ms.moviesapp;
+package com.ms.moviesapp.moviedetails;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,8 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.ms.moviesapp.Constants;
+import com.ms.moviesapp.R;
+import com.ms.moviesapp.settings.SettingsActivity;
 import com.ms.moviesapp.entities.Movie;
-import com.ms.moviesapp.fragments.MovieDetailsFragment;
 import com.squareup.picasso.Picasso;
 
 public class DetailsActivity extends AppCompatActivity {

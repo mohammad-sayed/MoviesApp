@@ -28,15 +28,15 @@ public class TestUriMatcher extends TestCase {
     public void testUriMatcher() {
         UriMatcher testMatcher = MoviesProvider.buildUriMatcher();
 
-        assertEquals("Error: The MOVIE URI was matched incorrectly.",
+        assertEquals("ErrorException: The MOVIE URI was matched incorrectly.",
                 testMatcher.match(TEST_MOVIE_DIR), MoviesProvider.MOVIES);
-        assertEquals("Error: The TRAILER URI was matched incorrectly.",
+        assertEquals("ErrorException: The TRAILER URI was matched incorrectly.",
                 testMatcher.match(TEST_TRAILERS_DIR), MoviesProvider.TRAILER_ITEM);
-        assertEquals("Error: The REVIEW WITH MOVIE URI was matched incorrectly.",
+        assertEquals("ErrorException: The REVIEW WITH MOVIE URI was matched incorrectly.",
                 testMatcher.match(TEST_REVIEWS_DIR), MoviesProvider.REVIEW_ITEM);
-        assertEquals("Error: The TRAILER WITH MOVIE ID was matched incorrectly.",
+        assertEquals("ErrorException: The TRAILER WITH MOVIE ID was matched incorrectly.",
                 testMatcher.match(TEST_TRAILERS_OF_MOVIE_DIR), MoviesProvider.MOVIE_TRAILERS);
-        assertEquals("Error: The TRAILER WITH MOVIE ID was matched incorrectly.",
+        assertEquals("ErrorException: The TRAILER WITH MOVIE ID was matched incorrectly.",
                 testMatcher.match(TEST_REVIEWS_OF_MOVIE_DIR), MoviesProvider.MOVIE_REVIEWS);
     }
 }

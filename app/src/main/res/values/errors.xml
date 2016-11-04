@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_no_data_retrieved">error no data retrieved</string>
+    <string name="error_connection">error connection</string>
+    <string name="error_closing_connection">error closing connection</string>
+    <string name="error_fetch_data">error fetching data</string>
+    <string name="error_url">error url</string>
+</resources>

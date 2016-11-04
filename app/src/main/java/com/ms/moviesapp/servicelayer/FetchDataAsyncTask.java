@@ -1,7 +1,15 @@
 package com.ms.moviesapp.servicelayer;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.ms.moviesapp.Constants;
+import com.ms.moviesapp.Constants.Errors;
+import com.ms.moviesapp.R;
+import com.ms.moviesapp.callbacks.OnErrorListener;
+import com.ms.moviesapp.callbacks.OnSuccessListener;
+import com.ms.moviesapp.entities.ErrorException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,28 +19,28 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+
 /**
  * Created by Mohammad-Sayed-PC on 1/9/2016.
  */
 public class FetchDataAsyncTask extends AsyncTask<String, Void, String> {
 
-    public final String ERROR_NO_DATA_RETRIEVED = "error_no_data_retrieved";
-    public final String ERROR_CONNECTION = "error_connection";
-    public final String ERROR_CLOSING_CONNECTION = "error_closing_connection";
-    public final String ERROR_FETCH_DATA = "error_fetching_data";
-    public final String ERROR_URL = "error_url";
-
     private final String LOG_TAG = FetchDataAsyncTask.class.getSimpleName();
-    private final String ERROR = "error";
-    private DataFetchedListener mDataFetchedListener;
+    private Context mContext;
+    private String mOperationName;
+    private OnSuccessListener mOnSuccessListener;
+    private OnErrorListener mOnErrorListener;
 
-    public FetchDataAsyncTask(DataFetchedListener dataFetchedListener) {
-        this.mDataFetchedListener = dataFetchedListener;
+    public FetchDataAsyncTask(Context context, String operationName, OnSuccessListener onSuccessListener, OnErrorListener onErrorListener) {
+        this.mContext = context;
+        this.mOperationName = operationName;
+        this.mOnSuccessListener = onSuccessListener;
+        this.mOnErrorListener = onErrorListener;
     }
 
     @Override
     protected String doInBackground(String... params) {
-        String moviesJsonString = null;
+        String jsonString = null;
         HttpURLConnection httpURLConnection = null;
         BufferedReader bufferedInputStream = null;
         try {
@@ -46,7 +54,7 @@ public class FetchDataAsyncTask extends AsyncTask<String, Void, String> {
 
             StringBuilder stringBuilder = new StringBuilder();
             if (inputStream == null)
-                return ERROR_CONNECTION;
+                return Errors.ERROR_CONNECTION;
             bufferedInputStream = new BufferedReader(new InputStreamReader(inputStream));
 
             String line;
@@ -54,15 +62,15 @@ public class FetchDataAsyncTask extends AsyncTask<String, Void, String> {
                 stringBuilder.append(line + "\n");
             }
             if (stringBuilder.length() == 0)
-                return ERROR_NO_DATA_RETRIEVED;
-            moviesJsonString = stringBuilder.toString();
+                return Errors.ERROR_NO_DATA_RETRIEVED;
+            jsonString = stringBuilder.toString();
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            moviesJsonString = ERROR_URL;
+            jsonString = Errors.ERROR_URL;
         } catch (IOException e) {
             e.printStackTrace();
-            moviesJsonString = ERROR_FETCH_DATA;
+            jsonString = Errors.ERROR_FETCH_DATA;
         } finally {
             if (httpURLConnection != null)
                 httpURLConnection.disconnect();
@@ -72,39 +80,46 @@ public class FetchDataAsyncTask extends AsyncTask<String, Void, String> {
                     bufferedInputStream.close();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    moviesJsonString = ERROR_CLOSING_CONNECTION;
+                    jsonString = Errors.ERROR_CLOSING_CONNECTION;
                 }
             }
         }
-        return moviesJsonString;
+        return jsonString;
     }
 
     @Override
     protected void onPostExecute(String s) {
         switch (s) {
-            case ERROR:
-                mDataFetchedListener.onDataFetchError(ERROR);
+            case Errors.ERROR_CONNECTION:
+                returnError(Constants.ErrorCodes.ERROR_CONNECTION, mContext.getString(R.string.error_connection));
                 break;
-            case ERROR_CONNECTION:
-                mDataFetchedListener.onDataFetchError(ERROR_CONNECTION);
+            case Errors.ERROR_CLOSING_CONNECTION:
+                returnError(Constants.ErrorCodes.ERROR_CLOSING_CONNECTION, mContext.getString(R.string.error_closing_connection));
                 break;
-            case ERROR_NO_DATA_RETRIEVED:
-                mDataFetchedListener.onDataFetchError(ERROR_NO_DATA_RETRIEVED);
+            case Errors.ERROR_NO_DATA_RETRIEVED:
+                returnError(Constants.ErrorCodes.ERROR_NO_DATA_RETRIEVED, mContext.getString(R.string.error_no_data_retrieved));
                 break;
-            case ERROR_URL:
-                mDataFetchedListener.onDataFetchError(ERROR_URL);
+            case Errors.ERROR_URL:
+                returnError(Constants.ErrorCodes.ERROR_URL, mContext.getString(R.string.error_url));
                 break;
-            case ERROR_FETCH_DATA:
-                mDataFetchedListener.onDataFetchError(ERROR_FETCH_DATA);
+            case Errors.ERROR_FETCH_DATA:
+                returnError(Constants.ErrorCodes.ERROR_FETCH_DATA, mContext.getString(R.string.error_fetch_data));
                 break;
             default:
-                mDataFetchedListener.onDataFetched(s);
+                returnSuccess(s);
         }
     }
 
-    public interface DataFetchedListener {
-        void onDataFetched(String data);
+    private StackTraceElement[] getStackTrace() {
+        return Thread.currentThread().getStackTrace();
+    }
 
-        void onDataFetchError(String error);
+    private void returnSuccess(String jsonString) {
+        mOnSuccessListener.onSuccess(mOperationName, jsonString);
+    }
+
+    private void returnError(int code, String message) {
+        ErrorException error = new ErrorException(code, message, getStackTrace());
+        mOnErrorListener.onError(mOperationName, error);
     }
 }

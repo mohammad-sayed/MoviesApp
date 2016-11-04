@@ -31,12 +31,12 @@ public class TestProvider extends AndroidTestCase {
             ProviderInfo providerInfo = pm.getProviderInfo(componentName, 0);
 
             // Make sure that the registered authority matches the authority from the Contract.
-            assertEquals("Error: WeatherProvider registered with authority: " + providerInfo.authority +
+            assertEquals("ErrorException: WeatherProvider registered with authority: " + providerInfo.authority +
                             " instead of authority: " + MovieContract.CONTENT_AUTHORITY,
                     providerInfo.authority, MovieContract.CONTENT_AUTHORITY);
         } catch (PackageManager.NameNotFoundException e) {
             // I guess the provider isn't registered correctly.
-            assertTrue("Error: MoviesProvider not registered at " + mContext.getPackageName(),
+            assertTrue("ErrorException: MoviesProvider not registered at " + mContext.getPackageName(),
                     false);
         }
     }
@@ -49,19 +49,19 @@ public class TestProvider extends AndroidTestCase {
         // content://com.ms.moviesapp/movies/
         String type = mContext.getContentResolver().getType(MovieContract.MovieEntry.CONTENT_URI);
         // vnd.android.cursor.dir/com.ms.moviesapp/movies
-        assertEquals("Error: the MovieEntry CONTENT_URI should return MovieEntry.CONTENT_TYPE",
+        assertEquals("ErrorException: the MovieEntry CONTENT_URI should return MovieEntry.CONTENT_TYPE",
                 MovieContract.MovieEntry.CONTENT_TYPE, type);
 
         // content://com.ms.moviesapp/trailers/[movie_id]
         type = mContext.getContentResolver().getType(MovieContract.TrailerEntry.buildTrailersOfMovieUri(TestUtilities.TEST_MOVIE_ID));
         // vnd.android.cursor.dir/com.ms.moviesapp/trailers
-        assertEquals("Error: the TrailerEntry CONTENT_URI should return TrailerEntry.CONTENT_TYPE",
+        assertEquals("ErrorException: the TrailerEntry CONTENT_URI should return TrailerEntry.CONTENT_TYPE",
                 MovieContract.TrailerEntry.CONTENT_TYPE, type);
 
         // content://com.ms.moviesapp/reviews/[movie_id]
         type = mContext.getContentResolver().getType(MovieContract.ReviewEntry.buildReviewsOfMovieUri(TestUtilities.TEST_MOVIE_ID));
         // vnd.android.cursor.dir/com.ms.moviesapp/reviews
-        assertEquals("Error: the ReviewEntry CONTENT_URI should return ReviewEntry .CONTENT_TYPE",
+        assertEquals("ErrorException: the ReviewEntry CONTENT_URI should return ReviewEntry .CONTENT_TYPE",
                 MovieContract.ReviewEntry.CONTENT_TYPE, type);
 
         long movieId = 123456L;
@@ -70,7 +70,7 @@ public class TestProvider extends AndroidTestCase {
         type = mContext.getContentResolver().getType(
                 MovieContract.MovieEntry.buildMovieUri(movieId));
         // vnd.android.cursor.item/com.ms.moviesapp/trailers/123456
-        assertEquals("Error: the MovieEntry CONTENT_URI with location should return MovieEntry.CONTENT_ITEM_TYPE",
+        assertEquals("ErrorException: the MovieEntry CONTENT_URI with location should return MovieEntry.CONTENT_ITEM_TYPE",
                 MovieContract.MovieEntry.CONTENT_ITEM_TYPE, type);
 
 
@@ -78,14 +78,14 @@ public class TestProvider extends AndroidTestCase {
         type = mContext.getContentResolver().getType(
                 MovieContract.TrailerEntry.buildTrailersOfMovieUri(movieId));
         // vnd.android.cursor.dir/com.ms.moviesapp/trailers/123456
-        assertEquals("Error: the TrailerEntry CONTENT_URI with location should return TrailerEntry.CONTENT_TYPE",
+        assertEquals("ErrorException: the TrailerEntry CONTENT_URI with location should return TrailerEntry.CONTENT_TYPE",
                 MovieContract.TrailerEntry.CONTENT_TYPE, type);
 
         // content://com.ms.moviesapp/review/123456
         type = mContext.getContentResolver().getType(
                 MovieContract.ReviewEntry.buildReviewsOfMovieUri(movieId));
         // vnd.android.cursor.dir/com.ms.moviesapp/reviews/123456
-        assertEquals("Error: the ReviewEntry CONTENT_URI with location should return ReviewEntry.CONTENT_TYPE",
+        assertEquals("ErrorException: the ReviewEntry CONTENT_URI with location should return ReviewEntry.CONTENT_TYPE",
                 MovieContract.ReviewEntry.CONTENT_TYPE, type);
 
     }
@@ -185,7 +185,7 @@ public class TestProvider extends AndroidTestCase {
                 null  // sort order
         );
 
-        TestUtilities.validateCursor("testInsertReadProvider. Error validating MovieEntry.",
+        TestUtilities.validateCursor("testInsertReadProvider. ErrorException validating MovieEntry.",
                 cursor, testValues);
 
         //******************************************************************************************
@@ -221,7 +221,7 @@ public class TestProvider extends AndroidTestCase {
                 null  // sort order
         );
 
-        TestUtilities.validateCursor("testInsertReadProvider. Error validating TrailerEntry Item.",
+        TestUtilities.validateCursor("testInsertReadProvider. ErrorException validating TrailerEntry Item.",
                 trailerCursor, trailerValues);
         //******************************************************************************************
 
@@ -254,7 +254,7 @@ public class TestProvider extends AndroidTestCase {
                 null // columns to group by
         );
 
-        TestUtilities.validateCursor("testInsertReadProvider. Error validating TrailerEntry for Movie insert.",
+        TestUtilities.validateCursor("testInsertReadProvider. ErrorException validating TrailerEntry for Movie insert.",
                 trailerCursor, trailerValues);
 
         // Add the location values in with the weather data so that we can make
@@ -269,7 +269,7 @@ public class TestProvider extends AndroidTestCase {
                 null, // values for "where" clause
                 null  // sort order
         );
-        TestUtilities.validateCursor("testInsertReadProvider.  Error validating joined Trailer and Movie Data.",
+        TestUtilities.validateCursor("testInsertReadProvider.  ErrorException validating joined Trailer and Movie Data.",
                 trailerCursor, trailerValues);
 
         //******************************************************************************************
@@ -306,7 +306,7 @@ public class TestProvider extends AndroidTestCase {
                 null  // sort order
         );
 
-        TestUtilities.validateCursor("testInsertReadProvider. Error validating ReviewEntry Item.",
+        TestUtilities.validateCursor("testInsertReadProvider. ErrorException validating ReviewEntry Item.",
                 reviewCursor, reviewValues);
         //******************************************************************************************
 
@@ -337,7 +337,7 @@ public class TestProvider extends AndroidTestCase {
                 null // columns to group by
         );
 
-        TestUtilities.validateCursor("testInsertReadProvider. Error validating ReviewEntry for Movie insert.",
+        TestUtilities.validateCursor("testInsertReadProvider. ErrorException validating ReviewEntry for Movie insert.",
                 reviewCursor, reviewValues);
 
         // Add the location values in with the weather data so that we can make
@@ -352,7 +352,7 @@ public class TestProvider extends AndroidTestCase {
                 null, // values for "where" clause
                 null  // sort order
         );
-        TestUtilities.validateCursor("testInsertReadProvider.  Error validating joined Review and Movie Data.",
+        TestUtilities.validateCursor("testInsertReadProvider.  ErrorException validating joined Review and Movie Data.",
                 reviewCursor, reviewValues);
 
     }
@@ -413,7 +413,7 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
         //Movies Must Equal Zero
-        assertEquals("Error: All Records not deleted from Movie table during delete", 0, cursor.getCount());
+        assertEquals("ErrorException: All Records not deleted from Movie table during delete", 0, cursor.getCount());
         //Insert two Movies
         ContentValues movieContentValues = TestUtilities.createMovieContentValues(TestUtilities.TEST_MOVIE_ID);
         Uri movie1Uri = mContext.getContentResolver().insert(MovieContract.MovieEntry.buildMovieUri(TestUtilities.TEST_MOVIE_ID), movieContentValues);
@@ -430,12 +430,12 @@ public class TestProvider extends AndroidTestCase {
         );
 
         //Movies must equal 2
-        assertEquals("Error: A Record not inserted to Movie table", 2, cursor.getCount());
+        assertEquals("ErrorException: A Record not inserted to Movie table", 2, cursor.getCount());
 
         //Delete a specific Movie for ID: TEST_MOVIE_ID, Use Selection and SelectionArgs
         int deletedRows = mContext.getContentResolver().delete(MovieContract.MovieEntry.buildMovieUri(TestUtilities.TEST_MOVIE_ID), null, null);
 
-        assertEquals("Error:A requested Records not deleted from Movie table", 1, deletedRows);
+        assertEquals("ErrorException:A requested Records not deleted from Movie table", 1, deletedRows);
 
         //Get AllMovies
         cursor = mContext.getContentResolver().query(
@@ -447,7 +447,7 @@ public class TestProvider extends AndroidTestCase {
         );
 
         //Movies Must Equal 1
-        assertEquals("Error: The Record not deleted from Movie table", 1, cursor.getCount());
+        assertEquals("ErrorException: The Record not deleted from Movie table", 1, cursor.getCount());
 
 
         //**************************** Test Trailer ************************************************
@@ -475,7 +475,7 @@ public class TestProvider extends AndroidTestCase {
         );
 
         //Trailers must equal zero
-        assertEquals("Error: All Records not deleted from Trailer table", 0, cursor.getCount());
+        assertEquals("ErrorException: All Records not deleted from Trailer table", 0, cursor.getCount());
 
         //Insert Four Trailers Two for each movieId
         ContentValues trailerContentValues = TestUtilities.createTrailerContentValues(TestUtilities.TEST_MOVIE_ID, TestUtilities.TEST_TRAILER_ID);
@@ -496,7 +496,7 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
         //Must Return 4 trailers
-        assertEquals("Error: Records not inserted to Trailer table", 4, cursor.getCount());
+        assertEquals("ErrorException: Records not inserted to Trailer table", 4, cursor.getCount());
 
         //Get Trailers Of TEST_MOVIE_ID
         cursor = mContext.getContentResolver().query(
@@ -507,7 +507,7 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
         //Must Return 2 trailers
-        assertEquals("Error: Records not inserted to Trailer table", 2, cursor.getCount());
+        assertEquals("ErrorException: Records not inserted to Trailer table", 2, cursor.getCount());
 
         //Get Trailers Of TEST_MOVIE_ID2
         cursor = mContext.getContentResolver().query(
@@ -518,7 +518,7 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
         //Must Return 2 trailers
-        assertEquals("Error: Records not inserted to Trailer table", 2, cursor.getCount());
+        assertEquals("ErrorException: Records not inserted to Trailer table", 2, cursor.getCount());
 
         //Test Delete Specific Trailer Record by Id
         deletedRows = mContext.getContentResolver().delete(
@@ -527,7 +527,7 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
 
-        assertEquals("Error:A requested Records not deleted from Trailer table", 1, deletedRows);
+        assertEquals("ErrorException:A requested Records not deleted from Trailer table", 1, deletedRows);
 
 
         //Get All Trailers
@@ -539,7 +539,7 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
         //Must Return 3 trailers
-        assertEquals("Error: Records not deleted from Trailer table", 3, cursor.getCount());
+        assertEquals("ErrorException: Records not deleted from Trailer table", 3, cursor.getCount());
 
 
         //Test Delete Reviews of Specific MovieId: TEST_MOVIE_ID2
@@ -547,7 +547,7 @@ public class TestProvider extends AndroidTestCase {
                 MovieContract.TrailerEntry.buildTrailersOfMovieUri(TEST_MOVIE_ID2),
                 null, null);
 
-        assertEquals("Error:A requested Records not deleted from Trailer table", 2, deletedRows);
+        assertEquals("ErrorException:A requested Records not deleted from Trailer table", 2, deletedRows);
 
         //Get All Trailers
         cursor = mContext.getContentResolver().query(
@@ -558,7 +558,7 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
         //Must Return 1 trailer
-        assertEquals("Error: Records not inserted to Trailer table", 1, cursor.getCount());
+        assertEquals("ErrorException: Records not inserted to Trailer table", 1, cursor.getCount());
 
         //Test Delete Reviews of Specific MovieId: TEST_MOVIE_ID2
         deletedRows = mContext.getContentResolver().delete(
@@ -566,7 +566,7 @@ public class TestProvider extends AndroidTestCase {
                 null, null);
 
         //Must Return 1
-        assertEquals("Error:A requested Records not deleted from Trailer table", 1, deletedRows);
+        assertEquals("ErrorException:A requested Records not deleted from Trailer table", 1, deletedRows);
 
         //Get All Trailers
         cursor = mContext.getContentResolver().query(
@@ -577,7 +577,7 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
         //Must Return 0 trailer
-        assertEquals("Error: Records not inserted to Trailer table", 0, cursor.getCount());
+        assertEquals("ErrorException: Records not inserted to Trailer table", 0, cursor.getCount());
 
         //************************************ Review Test *****************************************
 
@@ -599,7 +599,7 @@ public class TestProvider extends AndroidTestCase {
         );
 
         //Reviews must equal zero
-        assertEquals("Error: All Records not deleted from Review table", 0, cursor.getCount());
+        assertEquals("ErrorException: All Records not deleted from Review table", 0, cursor.getCount());
 
         //Insert Four Reviews Two for each movieId
         ContentValues reviewContentValues = TestUtilities.createReviewContentValues(TestUtilities.TEST_MOVIE_ID, TestUtilities.TEST_REVIEW_ID);
@@ -620,7 +620,7 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
         //Must Return 4 reviews
-        assertEquals("Error: Records not inserted to Review table", 4, cursor.getCount());
+        assertEquals("ErrorException: Records not inserted to Review table", 4, cursor.getCount());
 
         //Get Reviews Of TEST_MOVIE_ID
         cursor = mContext.getContentResolver().query(
@@ -631,7 +631,7 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
         //Must Return 2 Reviews
-        assertEquals("Error: Records not inserted to Review table", 2, cursor.getCount());
+        assertEquals("ErrorException: Records not inserted to Review table", 2, cursor.getCount());
 
         //Get Trailers Of TEST_MOVIE_ID2
         cursor = mContext.getContentResolver().query(
@@ -642,7 +642,7 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
         //Must Return 2 reviews
-        assertEquals("Error: Records not inserted to Review table", 2, cursor.getCount());
+        assertEquals("ErrorException: Records not inserted to Review table", 2, cursor.getCount());
 
         //Test Delete Specific Review Record by Id
         deletedRows = mContext.getContentResolver().delete(
@@ -651,7 +651,7 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
 
-        assertEquals("Error:A requested Records not deleted from Review table", 1, deletedRows);
+        assertEquals("ErrorException:A requested Records not deleted from Review table", 1, deletedRows);
 
 
         //Get All Review
@@ -663,7 +663,7 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
         //Must Return 3 Reviews
-        assertEquals("Error: Records not deleted from Review table", 3, cursor.getCount());
+        assertEquals("ErrorException: Records not deleted from Review table", 3, cursor.getCount());
 
 
         //Test Delete Reviews of Specific MovieId: TEST_MOVIE_ID2
@@ -671,7 +671,7 @@ public class TestProvider extends AndroidTestCase {
                 MovieContract.ReviewEntry.buildReviewsOfMovieUri(TEST_MOVIE_ID2),
                 null, null);
 
-        assertEquals("Error:A requested Records not deleted from Review table", 2, deletedRows);
+        assertEquals("ErrorException:A requested Records not deleted from Review table", 2, deletedRows);
 
         //Get All Reviews
         cursor = mContext.getContentResolver().query(
@@ -682,7 +682,7 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
         //Must Return 1 Review
-        assertEquals("Error: Records not inserted to Review table", 1, cursor.getCount());
+        assertEquals("ErrorException: Records not inserted to Review table", 1, cursor.getCount());
 
         //Test Delete Reviews of Specific MovieId: TEST_MOVIE_ID2
         deletedRows = mContext.getContentResolver().delete(
@@ -690,7 +690,7 @@ public class TestProvider extends AndroidTestCase {
                 null, null);
 
         //Must Return 1
-        assertEquals("Error:A requested Records not deleted from Review table", 1, deletedRows);
+        assertEquals("ErrorException:A requested Records not deleted from Review table", 1, deletedRows);
 
         //Get All Reviews
         cursor = mContext.getContentResolver().query(
@@ -701,7 +701,7 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
         //Must Return 0 Review
-        assertEquals("Error: Records not inserted to Review table", 0, cursor.getCount());
+        assertEquals("ErrorException: Records not inserted to Review table", 0, cursor.getCount());
 
 
         //Test Movie Delete Cascading:
@@ -728,7 +728,7 @@ public class TestProvider extends AndroidTestCase {
         //Delete a specific Movie for ID: TEST_MOVIE_ID, Use Selection and SelectionArgs
         deletedRows = mContext.getContentResolver().delete(MovieContract.MovieEntry.buildMovieUri(TestUtilities.TEST_MOVIE_ID), null, null);
 
-        assertEquals("Error:A requested Records not deleted from Movie table", 1, deletedRows);
+        assertEquals("ErrorException:A requested Records not deleted from Movie table", 1, deletedRows);
 
 
         //Get All Reviews
@@ -740,7 +740,7 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
 
-        assertEquals("Error: Records not inserted to Review table", 2, cursor.getCount());
+        assertEquals("ErrorException: Records not inserted to Review table", 2, cursor.getCount());
 
         cursor.close();
     }

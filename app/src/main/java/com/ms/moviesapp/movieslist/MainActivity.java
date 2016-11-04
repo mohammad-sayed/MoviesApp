@@ -1,4 +1,4 @@
-package com.ms.moviesapp;
+package com.ms.moviesapp.movieslist;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,15 +11,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.ms.moviesapp.Constants;
+import com.ms.moviesapp.moviedetails.DetailsActivity;
+import com.ms.moviesapp.R;
+import com.ms.moviesapp.settings.SettingsActivity;
 import com.ms.moviesapp.entities.Movie;
-import com.ms.moviesapp.fragments.MovieDetailsFragment;
-import com.ms.moviesapp.fragments.MoviesListFragment;
+import com.ms.moviesapp.moviedetails.MovieDetailsFragment;
 import com.ms.moviesapp.utils.ImageUtility;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity implements MoviesListFragment.OnMovieSelectedListener,
-        MoviesListFragment.OnMovieListRetrieved {
+        MoviesListFragment.OnMoviesListRetrieved {
 
     private ImageView mIvMovieBlurBackground;
     private MovieDetailsFragment mMovieDetailsFragment;

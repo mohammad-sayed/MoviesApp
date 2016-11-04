@@ -1,7 +1,9 @@
-package com.ms.moviesapp;
+package com.ms.moviesapp.settings;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+
+import com.ms.moviesapp.R;
 
 public class SettingsActivity extends PreferenceActivity {
 

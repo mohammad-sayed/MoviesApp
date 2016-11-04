@@ -74,7 +74,7 @@ public class TestUtilities extends AndroidTestCase {
         movieRowId = db.insert(MovieContract.MovieEntry.TABLE_NAME, null, testValues);
 
         // Verify we got a row back.
-        assertTrue("Error: Failure to insert Movie Values", movieRowId != -1);
+        assertTrue("ErrorException: Failure to insert Movie Values", movieRowId != -1);
 
         return movieRowId;
     }
@@ -128,7 +128,7 @@ public class TestUtilities extends AndroidTestCase {
         trailerRowId = db.insert(MovieContract.TrailerEntry.TABLE_NAME, null, testValues);
 
         // Verify we got a row back.
-        assertTrue("Error: Failure to insert Trailer Values", trailerRowId != -1);
+        assertTrue("ErrorException: Failure to insert Trailer Values", trailerRowId != -1);
 
         return trailerRowId;
     }
@@ -147,7 +147,7 @@ public class TestUtilities extends AndroidTestCase {
         long reviewRowId;
         reviewRowId = db.insert(MovieContract.ReviewEntry.TABLE_NAME, null, testValues);
         // Verify we got a row back.
-        assertTrue("Error: Failure to insert Review Values", reviewRowId != -1);
+        assertTrue("ErrorException: Failure to insert Review Values", reviewRowId != -1);
         return reviewRowId;
     }
 

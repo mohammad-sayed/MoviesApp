@@ -1,4 +1,4 @@
-package com.ms.moviesapp.adapters;
+package com.ms.moviesapp.movieslist;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

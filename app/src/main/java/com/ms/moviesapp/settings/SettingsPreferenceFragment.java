@@ -1,4 +1,4 @@
-package com.ms.moviesapp.fragments;
+package com.ms.moviesapp.settings;
 
 import android.os.Bundle;
 import android.preference.ListPreference;

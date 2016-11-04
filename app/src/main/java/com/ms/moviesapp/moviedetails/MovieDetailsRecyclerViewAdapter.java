@@ -1,4 +1,4 @@
-package com.ms.moviesapp.adapters;
+package com.ms.moviesapp.moviedetails;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -184,10 +184,10 @@ public class MovieDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         notifyDataSetChanged();
     }
 
-    public static interface OnDetailsActionListener {
-        public void onFavoritePressed(boolean favorite);
+    public interface OnDetailsActionListener {
+        void onFavoritePressed(boolean favorite);
 
-        public void onTrailerPressed(Trailer trailer);
+        void onTrailerPressed(Trailer trailer);
     }
 
 }

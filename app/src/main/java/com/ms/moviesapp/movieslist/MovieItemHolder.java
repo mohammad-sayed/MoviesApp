@@ -1,4 +1,4 @@
-package com.ms.moviesapp.adapters;
+package com.ms.moviesapp.movieslist;
 
 import android.widget.ImageView;
 import android.widget.TextView;
